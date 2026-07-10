@@ -1,4 +1,4 @@
-const PRODUCTION_HOST = "pranavi-crm.pages.dev";
+const ALLOWED_HOSTS = new Set(["ivbotpranavi.com", "www.ivbotpranavi.com", "ivbotpranavi-crm.pages.dev"]);
 
 const defaultData = {
   integrations: {
@@ -484,8 +484,8 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    if (url.hostname !== PRODUCTION_HOST) {
-      url.hostname = PRODUCTION_HOST;
+    if (!ALLOWED_HOSTS.has(url.hostname)) {
+      url.hostname = "ivbotpranavi.com";
       return Response.redirect(url.toString(), 301);
     }
 
