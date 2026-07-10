@@ -1,0 +1,9 @@
+{
+  "name": "pranavi-crm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Professional-grade CRM foundation with integration-ready backend APIs",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pranavi CRM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <p class="eyebrow">Pranavi CRM</p>
+          <h1>Relationship ops for modern revenue teams.</h1>
+          <p class="sidebar-copy">
+            Start by connecting your communication channels, then turn every
+            inbox and profile touchpoint into structured deal momentum.
+          </p>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Primary">
+          <button class="nav-item active" type="button">Overview</button>
+          <button class="nav-item" type="button">Contacts</button>
+          <button class="nav-item" type="button">Pipeline</button>
+          <button class="nav-item" type="button">Inbox Sync</button>
+          <button class="nav-item" type="button">Automation</button>
+        </nav>
+
+        <section class="readiness-card">
+          <p class="eyebrow">Launch readiness</p>
+          <div class="readiness-meter" aria-hidden="true">
+            <span id="readiness-bar"></span>
+          </div>
+          <p class="readiness-score"><span id="readiness-score">33</span>% ready</p>
+          <ul class="checklist">
+            <li>Connect email providers</li>
+            <li>Enable social enrichment</li>
+            <li>Review pipeline model</li>
+          </ul>
+        </section>
+      </aside>
+
+      <main class="main-content">
+        <header class="hero">
+          <div>
+            <p class="eyebrow">First step</p>
+            <h2>Connect your channels and stand up the CRM foundation.</h2>
+          </div>
+          <div class="hero-actions">
+            <button class="secondary-btn" id="reset-demo" type="button">
+              Reset demo
+            </button>
+            <button class="primary-btn" id="sync-all" type="button">
+              Sync all connected
+            </button>
+          </div>
+        </header>
+
+        <section class="status-strip" aria-label="CRM summary">
+          <article>
+            <span class="stat-label">Connected channels</span>
+            <strong id="connected-count">1</strong>
+          </article>
+          <article>
+            <span class="stat-label">Contacts captured</span>
+            <strong>248</strong>
+          </article>
+          <article>
+            <span class="stat-label">Open opportunities</span>
+            <strong>19</strong>
+          </article>
+          <article>
+            <span class="stat-label">Last sync</span>
+            <strong id="last-sync">2 min ago</strong>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Integrations</p>
+              <h3>Communication sources</h3>
+            </div>
+            <p class="panel-copy">
+              These are the first production-facing connectors we’ll use to feed
+              contact history, message activity, and profile enrichment into the CRM.
+            </p>
+          </div>
+
+          <div class="integration-grid">
+            <article class="integration-card connected" data-integration="gmail">
+              <div class="integration-top">
+                <span class="integration-badge gmail">Gmail</span>
+                <span class="pill status-pill">Connected</span>
+              </div>
+              <h4>Google Workspace mail sync</h4>
+              <p>
+                Pull threads, sender metadata, labels, and follow-up cues into
+                contact records and activity timelines.
+              </p>
+              <dl class="integration-meta">
+                <div>
+                  <dt>Scope</dt>
+                  <dd>Email, meetings, tasks</dd>
+                </div>
+                <div>
+                  <dt>Last sync</dt>
+                  <dd>2 minutes ago</dd>
+                </div>
+              </dl>
+              <button class="toggle-btn" type="button">Disconnect</button>
+            </article>
+
+            <article class="integration-card" data-integration="outlook">
+              <div class="integration-top">
+                <span class="integration-badge outlook">Outlook</span>
+                <span class="pill">Ready to connect</span>
+              </div>
+              <h4>Microsoft 365 inbox and calendar</h4>
+              <p>
+                Ingest Outlook email, calendar signals, and account-level touchpoints
+                for team-wide visibility.
+              </p>
+              <dl class="integration-meta">
+                <div>
+                  <dt>Scope</dt>
+                  <dd>Email, calendar, directory</dd>
+                </div>
+                <div>
+                  <dt>Status</dt>
+                  <dd>OAuth setup pending</dd>
+                </div>
+              </dl>
+              <button class="toggle-btn" type="button">Connect</button>
+            </article>
+
+            <article class="integration-card" data-integration="linkedin">
+              <div class="integration-top">
+                <span class="integration-badge linkedin">LinkedIn</span>
+                <span class="pill">Ready to connect</span>
+              </div>
+              <h4>Profile and account intelligence</h4>
+              <p>
+                Enrich leads with professional profiles, role changes, and account
+                context for warmer outbound and cleaner records.
+              </p>
+              <dl class="integration-meta">
+                <div>
+                  <dt>Scope</dt>
+                  <dd>Profiles, companies, notes</dd>
+                </div>
+                <div>
+                  <dt>Status</dt>
+                  <dd>Partner review required</dd>
+                </div>
+              </dl>
+              <button class="toggle-btn" type="button">Connect</button>
+            </article>
+          </div>
+        </section>
+
+        <section class="workspace-grid">
+          <article class="panel">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">CRM model</p>
+                <h3>Pipeline lanes</h3>
+              </div>
+            </div>
+            <div class="pipeline-grid">
+              <div class="lane">
+                <span class="lane-title">New leads</span>
+                <strong>42</strong>
+                <p>Captured from inbox and social touchpoints.</p>
+              </div>
+              <div class="lane">
+                <span class="lane-title">Qualified</span>
+                <strong>18</strong>
+                <p>High-intent contacts ready for owner assignment.</p>
+              </div>
+              <div class="lane">
+                <span class="lane-title">Proposal</span>
+                <strong>7</strong>
+                <p>Deals with active conversations and next steps.</p>
+              </div>
+              <div class="lane">
+                <span class="lane-title">Won</span>
+                <strong>5</strong>
+                <p>Closed accounts feeding revenue reporting.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Activity feed</p>
+                <h3>What the integrations will power</h3>
+              </div>
+            </div>
+            <ul class="feed-list">
+              <li>
+                <span class="feed-time">09:14</span>
+                <div>
+                  <strong>Gmail</strong>
+                  <p>New reply from Acme Corp synced to contact timeline.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feed-time">10:02</span>
+                <div>
+                  <strong>Outlook</strong>
+                  <p>Calendar event would create a next-step reminder.</p>
+                </div>
+              </li>
+              <li>
+                <span class="feed-time">11:37</span>
+                <div>
+                  <strong>LinkedIn</strong>
+                  <p>Role change alert would refresh account intelligence.</p>
+                </div>
+              </li>
+            </ul>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

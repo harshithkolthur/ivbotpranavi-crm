@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ivbot.io | pranavi crm</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: "#f9f9f9",
+              surface: "#ffffff",
+              "surface-soft": "#f3f3f4",
+              "surface-muted": "#eeeeee",
+              "surface-strong": "#e8e8e8",
+              primary: "#091426",
+              "primary-soft": "#1e293b",
+              ink: "#1a1c1c",
+              muted: "#45474c",
+              outline: "#c5c6cd",
+              success: "#166534",
+              "success-soft": "#dcfce7",
+              warning: "#9a3412",
+              "warning-soft": "#ffedd5",
+              info: "#0f5ea8",
+              "info-soft": "#dbeafe",
+              danger: "#b91c1c",
+              "danger-soft": "#fee2e2"
+            },
+            fontFamily: {
+              headline: ["Hanken Grotesk", "sans-serif"],
+              body: ["Inter", "sans-serif"],
+              label: ["JetBrains Mono", "monospace"]
+            },
+            boxShadow: {
+              panel: "0 4px 16px rgba(9, 20, 38, 0.05)"
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body class="bg-background font-body text-ink">
+    <div class="min-h-screen md:flex">
+      <aside
+        class="hidden md:flex md:w-[270px] md:flex-col border-r border-outline bg-surface px-4 py-6"
+      >
+        <div class="mb-8 px-2">
+          <div class="brand-panel">
+            <div class="brand-logo-shell">
+              <img
+                src="/ivbot-logo.png"
+                alt="IVBOT"
+                class="brand-logo"
+              />
+            </div>
+            <p class="brand-subtitle">pranavi crm</p>
+          </div>
+        </div>
+
+        <button
+          id="extract-cta"
+          class="mb-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary-soft"
+          type="button"
+        >
+          <span class="material-symbols-outlined text-[18px]">travel_explore</span>
+          Extract Leads
+        </button>
+
+        <nav class="flex flex-1 flex-col gap-2" aria-label="Primary">
+          <button class="nav-link active" data-view="overview" type="button">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span>Overview</span>
+          </button>
+          <button class="nav-link" data-view="pipeline" type="button">
+            <span class="material-symbols-outlined">view_kanban</span>
+            <span>Sales Pipeline</span>
+          </button>
+          <button class="nav-link" data-view="contacts" type="button">
+            <span class="material-symbols-outlined">contacts</span>
+            <span>Contacts</span>
+          </button>
+          <button class="nav-link" data-view="extraction" type="button">
+            <span class="material-symbols-outlined">extension</span>
+            <span>Lead Extraction</span>
+          </button>
+          <button class="nav-link" data-view="integrations" type="button">
+            <span class="material-symbols-outlined">settings_input_component</span>
+            <span>Integrations</span>
+          </button>
+          <button class="nav-link" data-view="settings" type="button">
+            <span class="material-symbols-outlined">tune</span>
+            <span>Provider Settings</span>
+          </button>
+        </nav>
+
+        <section class="mt-6 rounded-2xl border border-outline bg-surface-soft p-4">
+          <div class="mb-3 flex items-center justify-between">
+            <div>
+              <p class="font-label text-xs uppercase tracking-[0.18em] text-muted">
+                Workspace Health
+              </p>
+              <p class="mt-1 font-headline text-lg font-semibold text-primary">
+                Channel readiness
+              </p>
+            </div>
+            <span
+              id="sidebar-connected-count"
+              class="rounded-full bg-surface px-3 py-1 font-label text-xs text-primary"
+              >0 live</span
+            >
+          </div>
+          <div class="h-2 overflow-hidden rounded-full bg-surface-muted">
+            <div
+              id="sidebar-readiness-bar"
+              class="h-full w-0 rounded-full bg-primary transition-all duration-300"
+            ></div>
+          </div>
+          <p id="sidebar-readiness-text" class="mt-3 text-sm text-muted">
+            Waiting for first integrations.
+          </p>
+        </section>
+      </aside>
+
+      <main class="flex-1">
+        <header
+          class="sticky top-0 z-20 border-b border-outline bg-background/95 backdrop-blur"
+        >
+          <div class="flex flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-8">
+            <div>
+              <p class="font-label text-xs uppercase tracking-[0.2em] text-muted">
+                CRM workspace
+              </p>
+              <h1 id="page-title" class="font-headline text-3xl font-semibold tracking-tight text-primary">
+                Overview
+              </h1>
+              <p id="page-subtitle" class="mt-1 max-w-2xl text-sm text-muted">
+                A unified sales cockpit for leads, inbox signals, and connected channels.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <div
+                class="hidden min-w-[280px] items-center gap-2 rounded-xl border border-outline bg-surface px-3 py-2 md:flex"
+              >
+                <span class="material-symbols-outlined text-muted">search</span>
+                <input
+                  id="search-input"
+                  class="w-full border-0 bg-transparent p-0 text-sm text-ink placeholder:text-muted focus:ring-0"
+                  type="text"
+                  placeholder="Search contacts, deals, or activity"
+                />
+              </div>
+              <button
+                id="reset-demo"
+                class="rounded-xl border border-outline bg-surface px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface-soft"
+                type="button"
+              >
+                Reset demo
+              </button>
+              <button
+                id="sync-all"
+                class="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-soft"
+                type="button"
+              >
+                Sync connected
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <div class="border-b border-outline bg-surface px-4 py-3 md:hidden">
+          <div class="flex gap-2 overflow-x-auto pb-1">
+            <button class="nav-link active min-w-max" data-view="overview" type="button">
+              <span class="material-symbols-outlined">dashboard</span>
+              <span>Overview</span>
+            </button>
+            <button class="nav-link min-w-max" data-view="pipeline" type="button">
+              <span class="material-symbols-outlined">view_kanban</span>
+              <span>Pipeline</span>
+            </button>
+            <button class="nav-link min-w-max" data-view="contacts" type="button">
+              <span class="material-symbols-outlined">contacts</span>
+              <span>Contacts</span>
+            </button>
+            <button class="nav-link min-w-max" data-view="extraction" type="button">
+              <span class="material-symbols-outlined">extension</span>
+              <span>Extraction</span>
+            </button>
+            <button class="nav-link min-w-max" data-view="integrations" type="button">
+              <span class="material-symbols-outlined">settings_input_component</span>
+              <span>Integrations</span>
+            </button>
+            <button class="nav-link min-w-max" data-view="settings" type="button">
+              <span class="material-symbols-outlined">tune</span>
+              <span>Settings</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="px-4 py-6 md:px-8 md:py-8">
+          <div
+            id="alert"
+            class="mb-6 hidden rounded-2xl border px-4 py-3 text-sm shadow-panel"
+            role="status"
+          ></div>
+
+                    <section class="view-section space-y-6" data-view-section="overview">
+            <section class="panel-card overview-hero-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Executive summary</p>
+                  <h2 class="panel-title">Action planner dashboard</h2>
+                  <p class="summary-meta">Power BI-style overview for actions, task load, stage movement, and channel health.</p>
+                </div>
+              </div>
+              <div id="overview-kpis" class="overview-kpi-grid"></div>
+            </section>
+
+            <div class="overview-grid-2">
+              <section class="panel-card">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Pipeline pulse</p>
+                    <h2 class="panel-title">Planner summary</h2>
+                  </div>
+                </div>
+                <div id="overview-stage-chart" class="overview-chart-card"></div>
+              </section>
+
+              <section class="panel-card">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Channel mix</p>
+                    <h2 class="panel-title">Source analytics</h2>
+                  </div>
+                </div>
+                <div id="overview-channel-chart" class="overview-chart-card"></div>
+              </section>
+            </div>
+
+            <div class="overview-grid-2 overview-grid-stretch">
+              <section class="panel-card">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Action tracker</p>
+                    <h2 class="panel-title">Priority board</h2>
+                  </div>
+                </div>
+                <div id="action-tracker" class="tracker-stack"></div>
+              </section>
+
+              <section class="panel-card">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Ownership</p>
+                    <h2 class="panel-title">Task assignment planner</h2>
+                  </div>
+                </div>
+                <div id="overview-owner-chart" class="overview-chart-card compact-chart"></div>
+                <div id="task-assignment-tracker" class="tracker-stack mt-4"></div>
+              </section>
+            </div>
+
+            <section class="panel-card">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Activity</p>
+                  <h2 class="panel-title">Task activity and trendline</h2>
+                </div>
+              </div>
+              <div class="overview-activity-grid">
+                <div id="overview-activity-pie" class="overview-chart-card overview-pie-card"></div>
+                <div id="overview-activity-strip" class="overview-activity-strip"></div>
+              </div>
+              <div id="activity-feed" class="space-y-4 mt-5"></div>
+            </section>
+          </section>
+<section class="view-section hidden space-y-6" data-view-section="pipeline">
+            <section class="panel-card">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Pipeline board</p>
+                  <h2 class="panel-title">Deals by stage</h2>
+                </div>
+                <button
+                  id="open-lead-workflow"
+                  class="action-btn primary"
+                  type="button"
+                >
+                  Configure lead workflow
+                </button>
+              </div>
+              <div id="pipeline-board" class="kanban-grid"></div>
+            </section>
+
+            <section class="panel-card">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Lead workflow</p>
+                  <h2 class="panel-title">Prospecting control tower</h2>
+                </div>
+                <span id="workflow-status-pill" class="tracker-pill">Waiting for filters</span>
+              </div>
+              <div class="workflow-grid">
+                <article class="workflow-card">
+                  <p class="summary-label">Target regions</p>
+                  <strong id="workflow-regions" class="workflow-value">Not configured</strong>
+                  <p class="summary-meta">Choose markets before sourcing or importing leads.</p>
+                </article>
+                <article class="workflow-card">
+                  <p class="summary-label">Roles</p>
+                  <strong id="workflow-roles" class="workflow-value">Founders and operators</strong>
+                  <p class="summary-meta">Track leadership roles plus optional custom titles.</p>
+                </article>
+                <article class="workflow-card">
+                  <p class="summary-label">Data package</p>
+                  <strong id="workflow-fields" class="workflow-value">Email, mobile, company context</strong>
+                  <p class="summary-meta">Define the fields required for qualification and routing.</p>
+                </article>
+                <article class="workflow-card">
+                  <p class="summary-label">Delivery path</p>
+                  <strong id="workflow-delivery" class="workflow-value">Excel review and draft approval</strong>
+                  <p class="summary-meta">Qualified leads move to export, review, drafts, and approval.</p>
+                </article>
+              </div>
+                            <div id="workflow-steps" class="tracker-stack mt-6"></div>
+              <div class="workflow-actions mt-6">
+                <button id="run-lead-workflow" class="action-btn primary" type="button">Run qualification</button>
+                <button id="export-lead-workflow" class="action-btn" type="button">Export CSV</button>
+                <button id="generate-workflow-drafts" class="action-btn" type="button">Generate drafts</button>
+                <button id="request-workflow-approval" class="action-btn" type="button">Queue approval</button>
+              </div>
+              <div class="workflow-output-grid mt-6">
+                <section class="workflow-output-card">
+                  <div class="panel-header compact-header">
+                    <div>
+                      <p class="eyebrow">Latest run</p>
+                      <h3 class="workflow-output-title">Qualified leads</h3>
+                    </div>
+                  </div>
+                  <div id="workflow-run-results" class="tracker-stack"></div>
+                </section>
+                <section class="workflow-output-card">
+                  <div class="panel-header compact-header">
+                    <div>
+                      <p class="eyebrow">Draft queue</p>
+                      <h3 class="workflow-output-title">Message preparation</h3>
+                    </div>
+                  </div>
+                  <div id="workflow-draft-results" class="tracker-stack"></div>
+                </section>
+              </div>
+            </section>
+          </section>
+
+          <section class="view-section hidden space-y-6" data-view-section="contacts">
+            <section class="panel-card">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Contact channels</p>
+                  <h2 id="contacts-panel-title" class="panel-title">Customer and lead records</h2>
+                  <p id="contacts-panel-copy" class="summary-meta">
+                    Switch between WhatsApp, Google Workspace, Microsoft Outlook, and LinkedIn contact streams directly inside the CRM workspace.
+                  </p>
+                </div>
+              </div>
+              <div id="contacts-channel-tabs" class="contacts-channel-tabs"></div>
+              <div id="contacts-channel-summary" class="contacts-channel-summary"></div>
+              <div id="contacts-embedded-app" class="contacts-embedded-app"></div>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-left">
+                  <thead>
+                    <tr class="border-b border-outline text-xs uppercase tracking-[0.18em] text-muted">
+                      <th class="px-4 py-3 font-label">Contact</th>
+                      <th class="px-4 py-3 font-label">Stage</th>
+                      <th class="px-4 py-3 font-label">Source</th>
+                      <th class="px-4 py-3 font-label">Last activity</th>
+                    </tr>
+                  </thead>
+                  <tbody id="contacts-table"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="view-section hidden space-y-6" data-view-section="extraction">
+            <div class="grid gap-6 xl:grid-cols-[1.35fr_0.95fr]">
+              <section class="panel-card">
+                <div class="panel-header">
+                  <div>
+                    <p class="eyebrow">Lead extraction</p>
+                    <h2 class="panel-title">Prospecting launchpad</h2>
+                  </div>
+                </div>
+                <div class="rounded-2xl bg-surface-soft p-5">
+                  <p class="mb-4 text-sm leading-6 text-muted">
+                    This section now uses the stitched extraction layout and can be connected to a
+                    future LinkedIn or list-import workflow.
+                  </p>
+                  <div class="flex flex-col gap-3 lg:flex-row">
+                    <input
+                      id="extraction-url"
+                      class="flex-1 rounded-xl border border-outline bg-surface px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-primary focus:ring-primary"
+                      type="url"
+                      placeholder="Paste a LinkedIn search, Sales Navigator list, or company page URL"
+                    />
+                    <button
+                      id="mock-extract"
+                      class="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-soft"
+                      type="button"
+                    >
+                      Start extraction
+                    </button>
+                  </div>
+                  <div class="mt-4 flex flex-wrap gap-3 text-sm text-muted">
+                    <label class="inline-flex items-center gap-2">
+                      <input checked type="checkbox" class="rounded border-outline text-primary focus:ring-primary" />
+                      Extract emails
+                    </label>
+                    <label class="inline-flex items-center gap-2">
+                      <input checked type="checkbox" class="rounded border-outline text-primary focus:ring-primary" />
+                      Extract phone numbers
+                    </label>
+                  </div>
+                </div>
+              </section>
+
+              <section class="grid gap-4 sm:grid-cols-3 xl:grid-cols-1">
+                <article class="summary-card">
+                  <p class="summary-label">Extracted today</p>
+                  <strong id="extracted-today" class="summary-value">0</strong>
+                  <p class="summary-meta">Derived from contact records currently loaded.</p>
+                </article>
+                <article class="summary-card">
+                  <p class="summary-label">Active follow-ups</p>
+                  <strong id="followups-count" class="summary-value">0</strong>
+                  <p class="summary-meta">Contacts in qualified or proposal stages.</p>
+                </article>
+                <article class="summary-card">
+                  <p class="summary-label">Conversion rate</p>
+                  <strong id="conversion-rate" class="summary-value">0%</strong>
+                  <p class="summary-meta">Won deals divided by total deals.</p>
+                </article>
+              </section>
+            </div>
+          </section>
+
+          <section class="view-section hidden space-y-6" data-view-section="integrations">
+            <section class="panel-card">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Integrations</p>
+                  <h2 class="panel-title">Provider connection surface</h2>
+                </div>
+                <button
+                  id="refresh-dashboard"
+                  class="rounded-xl border border-outline bg-surface px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface-soft"
+                  type="button"
+                >
+                  Refresh data
+                </button>
+              </div>
+              <div id="integrations-grid" class="grid gap-5 lg:grid-cols-2"></div>
+            </section>
+          </section>
+
+          <section class="view-section hidden space-y-6" data-view-section="settings">
+            <section class="panel-card">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Configuration</p>
+                  <h2 class="panel-title">Provider credentials</h2>
+                </div>
+              </div>
+              <form id="settings-form" class="space-y-6">
+                <div class="grid gap-6 xl:grid-cols-2">
+                  <section class="settings-card">
+                    <h3 class="settings-title">Gmail</h3>
+                    <div class="field-grid">
+                      <label class="field">
+                        <span>Client ID</span>
+                        <input name="gmailClientId" type="text" />
+                      </label>
+                      <label class="field">
+                        <span>Client Secret</span>
+                        <input name="gmailClientSecret" type="password" placeholder="Leave blank to keep current secret" />
+                      </label>
+                    </div>
+                  </section>
+
+                  <section class="settings-card">
+                    <h3 class="settings-title">Outlook</h3>
+                    <div class="field-grid">
+                      <label class="field">
+                        <span>Client ID</span>
+                        <input name="outlookClientId" type="text" />
+                      </label>
+                      <label class="field">
+                        <span>Client Secret</span>
+                        <input name="outlookClientSecret" type="password" placeholder="Leave blank to keep current secret" />
+                      </label>
+                      <label class="field xl:col-span-2">
+                        <span>Tenant ID</span>
+                        <input name="outlookTenantId" type="text" />
+                      </label>
+                    </div>
+                  </section>
+
+                  <section class="settings-card">
+                    <h3 class="settings-title">LinkedIn</h3>
+                    <div class="field-grid">
+                      <label class="field">
+                        <span>Client ID</span>
+                        <input name="linkedinClientId" type="text" />
+                      </label>
+                      <label class="field">
+                        <span>Client Secret</span>
+                        <input name="linkedinClientSecret" type="password" placeholder="Leave blank to keep current secret" />
+                      </label>
+                      <label class="field xl:col-span-2">
+                        <span>Scope</span>
+                        <input name="linkedinScope" type="text" />
+                      </label>
+                    </div>
+                  </section>
+
+                  <section class="settings-card">
+                    <h3 class="settings-title">WhatsApp</h3>
+                    <div class="field-grid">
+                      <label class="field">
+                        <span>Access Token</span>
+                        <input name="whatsappAccessToken" type="password" placeholder="Leave blank to keep current token" />
+                      </label>
+                      <label class="field">
+                        <span>Phone Number ID</span>
+                        <input name="whatsappPhoneNumberId" type="text" />
+                      </label>
+                      <label class="field">
+                        <span>Business Account ID</span>
+                        <input name="whatsappBusinessAccountId" type="text" />
+                      </label>
+                      <label class="field">
+                        <span>Webhook Verify Token</span>
+                        <input name="whatsappWebhookVerifyToken" type="password" placeholder="Leave blank to keep current token" />
+                      </label>
+                    </div>
+                  </section>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-surface-soft p-4">
+                  <p id="webhook-url" class="text-sm text-muted">Webhook URL will load here.</p>
+                  <button
+                    class="rounded-xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-soft"
+                    type="submit"
+                  >
+                    Save provider settings
+                  </button>
+                </div>
+              </form>
+            </section>
+          </section>
+        </div>
+      </main>
+    </div>
+
+        <div id="lead-workflow-modal" class="modal-shell hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="lead-workflow-title">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Lead workflow setup</p>
+            <h2 id="lead-workflow-title" class="panel-title">Filter and approval design</h2>
+          </div>
+          <button id="close-lead-workflow" class="action-btn" type="button">Close</button>
+        </div>
+
+        <form id="lead-workflow-form" class="space-y-6">
+          <section class="workflow-form-section">
+            <div>
+              <p class="summary-label">Regions</p>
+              <p class="summary-meta">Select target markets for the lead list.</p>
+            </div>
+            <div class="checkbox-grid">
+              <label class="check-tile"><input type="checkbox" name="regions" value="North America" checked />North America</label>
+              <label class="check-tile"><input type="checkbox" name="regions" value="Europe" />Europe</label>
+              <label class="check-tile"><input type="checkbox" name="regions" value="Middle East" />Middle East</label>
+              <label class="check-tile"><input type="checkbox" name="regions" value="India" checked />India</label>
+              <label class="check-tile"><input type="checkbox" name="regions" value="APAC" />APAC</label>
+              <label class="check-tile"><input type="checkbox" name="regions" value="LATAM" />LATAM</label>
+            </div>
+          </section>
+
+          <section class="workflow-form-section">
+            <div>
+              <p class="summary-label">Roles</p>
+              <p class="summary-meta">Use checkboxes or add a custom role box.</p>
+            </div>
+            <div class="checkbox-grid">
+              <label class="check-tile"><input type="checkbox" name="roles" value="Founder" checked />Founder</label>
+              <label class="check-tile"><input type="checkbox" name="roles" value="CEO" checked />CEO</label>
+              <label class="check-tile"><input type="checkbox" name="roles" value="COO" />COO</label>
+              <label class="check-tile"><input type="checkbox" name="roles" value="CMO" />CMO</label>
+              <label class="check-tile"><input type="checkbox" name="roles" value="Head of Sales" />Head of Sales</label>
+              <label class="check-tile"><input type="checkbox" name="roles" value="Employee" />Other employees</label>
+            </div>
+            <label class="field mt-4">
+              <span>Custom role titles</span>
+              <input id="workflow-custom-roles" type="text" placeholder="Example: VP Growth, GTM Lead, RevOps Manager" />
+            </label>
+          </section>
+
+          <section class="workflow-form-section">
+            <div>
+              <p class="summary-label">Fields to extract</p>
+              <p class="summary-meta">Choose the lead details needed for qualification.</p>
+            </div>
+            <div class="checkbox-grid">
+              <label class="check-tile"><input type="checkbox" name="fields" value="Email" checked />Email</label>
+              <label class="check-tile"><input type="checkbox" name="fields" value="Mobile" checked />Mobile</label>
+              <label class="check-tile"><input type="checkbox" name="fields" value="Company" checked />Company</label>
+              <label class="check-tile"><input type="checkbox" name="fields" value="Headline" />Headline</label>
+              <label class="check-tile"><input type="checkbox" name="fields" value="Location" />Location</label>
+              <label class="check-tile"><input type="checkbox" name="fields" value="Other details" />Other details</label>
+            </div>
+          </section>
+
+          <section class="workflow-form-section">
+            <div>
+              <p class="summary-label">Approvals and draft path</p>
+              <p class="summary-meta">Keep sending and account use behind explicit user approval.</p>
+            </div>
+            <div class="checkbox-grid">
+              <label class="check-tile"><input type="checkbox" name="approvals" value="Save qualified leads to Excel" checked />Save qualified leads to Excel</label>
+              <label class="check-tile"><input type="checkbox" name="approvals" value="Notify CRM owner for review" checked />Notify CRM owner for review</label>
+              <label class="check-tile"><input type="checkbox" name="approvals" value="Prepare LinkedIn draft messages" checked />Prepare LinkedIn draft messages</label>
+              <label class="check-tile"><input type="checkbox" name="approvals" value="Send WhatsApp approval prompt" checked />Send WhatsApp approval prompt</label>
+            </div>
+            <label class="field mt-4">
+              <span>Message template note</span>
+              <input id="workflow-template-note" type="text" placeholder="Hi {{name}}, I wanted to reach out about {{company}}" />
+            </label>
+          </section>
+
+          <section class="workflow-form-section">
+            <div>
+              <p class="summary-label">Draft destination</p>
+              <p class="summary-meta">Specify the LinkedIn account label used for human-reviewed drafts.</p>
+            </div>
+            <label class="field mt-4">
+              <span>Draft account label</span>
+              <input id="workflow-draft-account" type="text" placeholder="Example: Founder outreach account" />
+            </label>
+          </section>
+
+          <div class="modal-actions">
+            <button class="action-btn" type="button" id="cancel-lead-workflow">Cancel</button>
+            <button class="action-btn primary" type="submit">Start workflow plan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
